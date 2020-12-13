@@ -1,1 +1,2 @@
-//all imports for js will be here
+// all imports for js will be here
+import '../styles/styles.sass';
