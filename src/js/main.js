@@ -5,7 +5,12 @@ import './global-cases/global-cases';
 import '../styles/reset.sass';
 import '../assets/fonts/fonts.sass';
 import '../styles/styles.sass';
-import '../styles/loading-wheel.sass';
 
-// all imports for styles
+import '../styles/header/header.sass';
+import '../styles/region-stats/cases.sass';
+import '../styles/map/map.sass';
+import '../styles/death-stats/death.sass';
+import '../styles/footer/footer.sass';
+
+import '../styles/loading-wheel.sass';
 import '../styles/global-cases/global-cases.sass';
