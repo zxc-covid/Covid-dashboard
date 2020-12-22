@@ -4,9 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
-    <title>Covid-dashboard</title>
+    <title>Covid dashboard</title>
 </head>
 <body>
-    <h1>Hello</h1>
+    <header class="header">
+        <div class="heading"></div>
+        <div class="header__filter-wrapper">
+            <select name="data" id="data-select" class="header__filter filter">
+                <option selected disabled>Choose Data</option>
+                <option value="global-cases">Global Cases</option>
+                <option value="global-deaths">Global Deaths</option>
+                <option value="global-recovered">Global Recovered</option>
+            </select>
+            <select name="methods" id="methods-select" class="header__filter filter">
+                <option selected disabled>Choose Method</option>
+                <option value="all-time">All time</option>
+                <option value="last-day">Last Day</option>
+            </select>
+        </div>
+    </header>
+    <main class="main">
+        <section class="cases-wrapper">
+            <div class="global-cases-wrapper">
+                <h1 class="global-cases--text">Global cases</h1>
+                <div class="lds lds--global-cases"></div>
+            </div>
+            <div class="cases-by-places">
+
+            </div>
+        </section>
+        <section class="map-wrapper">
+
+        </section>
+        <section class="deaths-wrapper">
+            <div class="deaths-recovered-wrapper">
+                <div class="global-deaths-wrapper">
+
+                </div>
+                <div class="global-recovered-wrapper">
+    
+                </div>
+            </div>
+            <div class="graph-wrapper">
+
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        
+    </footer>
 </body>
 </html>
