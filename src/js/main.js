@@ -6,6 +6,7 @@ import '../styles/reset.sass';
 import '../assets/fonts/fonts.sass';
 import '../styles/styles.sass';
 
+import './region-stats/region-stats';
 import '../styles/header/header.sass';
 import '../styles/region-stats/cases.sass';
 import '../styles/map/map.sass';
