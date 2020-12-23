@@ -1,0 +1,42 @@
+.graph-wrapper
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    width: 100%
+    height: 100%
+    background-color: #222f3e
+
+.graph
+    width: 100%
+    max-height: 80%
+
+.graph-controls
+    display: flex
+    flex-direction: row
+    justify-content: center
+    align-items: center
+    width: 100%
+    background-color: #222f3e
+
+.graph--description
+    min-width: 150px
+    text-align: center
+    font-size: 2rem
+    font-family: HammersmithOne
+
+.graph-arrow--right, .graph-arrow--left
+    width: 30px
+    height: 30px
+    margin: 0 5%
+    background-position: 50% 50%
+    background-repeat: no-repeat
+    border: none
+
+.graph-arrow--right
+    background: url('../../assets/images/arrow-right-graph.svg')
+.graph-arrow--left
+    background: url('../../assets/images/arrow-left-graph.svg')
+
+.graph-arrow--left:hover, .graph-arrow--right:hover
+    cursor: pointer
