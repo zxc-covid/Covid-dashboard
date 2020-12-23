@@ -3,6 +3,7 @@ import './global-cases/global-cases';
 import './death-stats/death-stats';
 import './region-stats/region-stats';
 import './death-stats/recovered-stats';
+import './map/map';
 
 // main imports!
 import '../styles/reset.sass';
