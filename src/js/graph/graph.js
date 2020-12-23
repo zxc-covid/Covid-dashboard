@@ -1,4 +1,5 @@
 import Chart from 'chart.js';
+import moment from 'moment';
 
 const GraphWrapper = document.querySelector('.graph-wrapper');
 const Graph = document.createElement('canvas');
@@ -23,29 +24,46 @@ GraphControls.appendChild(LeftArrow);
 GraphControls.appendChild(GraphDescription);
 GraphControls.appendChild(RightArrow);
 
-const ChartData = [1, 2, 3, 3232, 4000, 10000];
-const ChartLabels = ['11.02', '12.02', '13.02', '14.02', '15.02', '16.02'];
+const ChartData = [];
 
-const myChart = new Chart(Graph, {
-  type: 'line',
+const chart = new Chart(Graph, {
+  type: 'bar',
   data: {
-    labels: ChartLabels,
     datasets: [{
       label: 'cases',
       data: ChartData,
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      backgroundColor: 'rgba(255, 159, 64, 1)',
       borderColor: 'rgba(255, 159, 64, 1)',
-      borderWidth: 1,
+      borderWidth: 0.5,
+      barThickness: 2,
     }],
   },
   options: {
-    tooltips: {
-      mode: 'point',
-    },
+    responsive: false,
     scales: {
       yAxes: [{
         ticks: {
-          beginAtZero: true,
+          beginAtZero: false,
+          maxTicksLimit: 5,
+          callback(value) {
+            let letter = 'K';
+            let number = value;
+            if (value >= 1000) {
+              letter = 'M';
+              number /= 100;
+            }
+            return `${number}${letter}`;
+          },
+        },
+      }],
+      xAxes: [{
+        type: 'time',
+        time: {
+          unit: 'month',
+        },
+        ticks: {
+          fontSize: 8,
+          maxTicksLimit: 0,
         },
       }],
     },
@@ -55,8 +73,86 @@ const myChart = new Chart(Graph, {
   },
 });
 
-setTimeout(() => {
-  myChart.data.datasets[0].data.forEach((e) => e * 2);
-  myChart.update();
-  console.log('w');
-}, 2000);
+Graph.style.width = '100%';
+
+const requestOptions = {
+  method: 'GET',
+};
+
+const APIData = [];
+const graphCaption = {
+  next: 'Daily deaths',
+  previous: 'Daily Recovered',
+  current: 'Daily Cases',
+  forward() {
+    [this.next, this.current, this.previous] = [this.previous, this.next, this.current];
+  },
+  back() {
+    [this.previous, this.current, this.next] = [this.next, this.previous, this.current];
+  },
+};
+
+const graphMode = {
+  next: 'total_deaths',
+  previous: 'total_recovered',
+  current: 'total_cases',
+  forward() {
+    [this.next, this.current, this.previous] = [this.previous, this.next, this.current];
+    graphCaption.forward();
+  },
+  back() {
+    [this.previous, this.current, this.next] = [this.next, this.previous, this.current];
+    graphCaption.back();
+  },
+};
+function updateGrapCaption() {
+  GraphDescription.innerText = graphCaption.current;
+}
+
+function updateGraph() {
+  ChartData.length = 0;
+  APIData.forEach((e) => {
+    const chunk = {};
+    chunk.x = new Date(e.date).toISOString().substring(0, 10);
+    chunk.y = parseFloat((e[graphMode.current] / 1e5).toFixed(3));
+
+    ChartData.push(chunk);
+  });
+  chart.update();
+}
+
+function updateData(rawData) {
+  rawData.forEach((e) => {
+    const chunk = {};
+    chunk.date = moment(e.last_update).format();
+    chunk.total_cases = e.total_cases;
+    chunk.total_deaths = e.total_deaths;
+    chunk.total_recovered = e.total_recovered;
+
+    APIData.push(chunk);
+  });
+  updateGraph();
+}
+
+function getGraphData() {
+  fetch('https://covid19-api.org/api/timeline', requestOptions)
+    .then((response) => response.json())
+    .then((data) => updateData(data));
+}
+
+function getPreviousGraph() {
+  graphMode.back();
+  updateGraph();
+  updateGrapCaption();
+}
+
+function getNextGraph() {
+  graphMode.forward();
+  updateGraph();
+  updateGrapCaption();
+}
+
+RightArrow.addEventListener('click', getNextGraph);
+LeftArrow.addEventListener('click', getPreviousGraph);
+
+getGraphData();

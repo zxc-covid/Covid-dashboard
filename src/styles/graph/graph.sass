@@ -1,13 +1,15 @@
 .graph-wrapper
     display: flex
     flex-direction: column
-    width: 400px
-    height: 250px
-    background-color: #222f3e;
+    align-items: center
+    justify-content: center
+    width: 100%
+    height: 100%
+    background-color: #222f3e
 
 .graph
     width: 100%
-    height: 80%
+    max-height: 80%
 
 .graph-controls
     display: flex
@@ -15,27 +17,26 @@
     justify-content: center
     align-items: center
     width: 100%
-    height: 20%
-    background-color: #CAD3C8
+    background-color: #222f3e
 
 .graph--description
-    min-width: 100px
+    min-width: 150px
     text-align: center
+    font-size: 2rem
+    font-family: HammersmithOne
+
+.graph-arrow--right, .graph-arrow--left
+    width: 30px
+    height: 30px
+    margin: 0 5%
+    background-position: 50% 50%
+    background-repeat: no-repeat
+    border: none
 
 .graph-arrow--right
-    width: 30px
-    height: 30px
-    margin: 0 40px
     background: url('../../assets/images/arrow-right-graph.svg')
-    background-position: 50% 50%
-    background-repeat: no-repeat
-    border: none
-
 .graph-arrow--left
-    margin: 0 40px
-    width: 30px
-    height: 30px
     background: url('../../assets/images/arrow-left-graph.svg')
-    background-position: 50% 50%
-    background-repeat: no-repeat
-    border: none
+
+.graph-arrow--left:hover, .graph-arrow--right:hover
+    cursor: pointer
