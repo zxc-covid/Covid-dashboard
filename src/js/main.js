@@ -4,6 +4,7 @@ import './death-stats/death-stats';
 import './region-stats/region-stats';
 import './death-stats/recovered-stats';
 import './graph/graph';
+import './footer/footer';
 
 // main imports!
 import '../styles/reset.sass';
