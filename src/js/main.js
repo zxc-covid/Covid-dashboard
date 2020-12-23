@@ -1,4 +1,5 @@
 // all imports for js
+
 import './global-cases/global-cases';
 import './death-stats/death-stats';
 import './region-stats/region-stats';
@@ -20,3 +21,4 @@ import '../styles/footer/footer.sass';
 import '../styles/loading-wheel.sass';
 import '../styles/global-cases/global-cases.sass';
 import '../styles/graph/graph.sass';
+import '../styles/leaflet.css';

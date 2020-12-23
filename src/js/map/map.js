@@ -1,6 +1,8 @@
 /* eslint-disable max-len */
 /* eslint-disable no-console */
 /* eslint-disable no-undef */
+import leaflet from 'leaflet';
+
 const mapContainer = document.getElementById('map');
 const mapOptions = {
   center: [41.3775, 64.5853],
@@ -8,8 +10,8 @@ const mapOptions = {
 };
 let map;
 function appendMap() {
-  map = new L.Map(mapContainer, mapOptions);
-  new L.TileLayer('https://api.mapbox.com/styles/v1/shaxxkh/ckj1fzzvv4rlp19t7828bld61/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2hheHhraCIsImEiOiJja2oxOWZsNTEwNGdvMnhwaXc5eXQ0a3RiIn0.SgD1Ef3GQYXxf2P1BpvlUw').addTo(map);
+  map = new leaflet.Map(mapContainer, mapOptions);
+  new leaflet.TileLayer('https://api.mapbox.com/styles/v1/shaxxkh/ckj1fzzvv4rlp19t7828bld61/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2hheHhraCIsImEiOiJja2oxOWZsNTEwNGdvMnhwaXc5eXQ0a3RiIn0.SgD1Ef3GQYXxf2P1BpvlUw').addTo(map);
 }
 
 /* function addCircles(lat, lon, cases) {
