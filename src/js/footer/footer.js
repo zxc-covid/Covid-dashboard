@@ -1,4 +1,4 @@
-const Developers = document.querySelector('.developers-wrapper');
+const Developers = document.querySelector('.footer');
 
 Developers.addEventListener('click', (e) => {
   if (e.target.className === 'developer') {
