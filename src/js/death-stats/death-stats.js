@@ -1,83 +1,81 @@
-/* eslint-disable vars-on-top */
-/* eslint-disable no-var */
 /* eslint-disable no-use-before-define */
-/* eslint-disable no-console */
 const deathsContainer = document.querySelector('.deaths');
 
 const deathsMode = {
-  last: { method: appendDeathsPerHundredThousandPeople, api: 'https://disease.sh/v3/covid-19/countries?sort=deaths' },
-  current: { method: appendGlobalDeaths, api: 'https://api.covid19api.com/summary' },
-  next: { method: appendLastDayDeaths, api: 'https://api.covid19api.com/summary' },
+  last: { method: appendDeathsPerHundredThousandPeople, api: 'https://disease.sh/v3/covid-19/countries?sort=deaths', type: '100k' },
+  current: { method: appendDeathsByCountries, api: 'https://disease.sh/v3/covid-19/countries?yesterday=true&sort=deaths', type: 'global' },
+  next: { method: appendLastDayDeaths, api: 'https://disease.sh/v3/covid-19/countries?yesterday=true&sort=todayDeaths', type: 'last-day' },
 };
 
 const requestOption = {
   method: 'GET',
 };
+async function getData(func, api) {
+  await fetch(api, requestOption)
+    .then((response) => response.json())
+    .then((json) => func(json));
+}
 
-function moveForward() {
+function addControls(type) {
+  const deathsControls = document.createElement('div');
+  deathsControls.classList.add('graph-controls');
+  deathsControls.id = 'deaths-controls';
+
+  const RightArrow = document.createElement('button');
+  RightArrow.classList.add('graph-arrow--right');
+  RightArrow.addEventListener('click', moveForward);
+
+  const LeftArrow = document.createElement('button');
+  LeftArrow.classList.add('graph-arrow--left');
+  LeftArrow.addEventListener('click', moveBack);
+
+  const deathsDescription = document.createElement('p');
+  deathsDescription.classList.add('graph--description');
+
+  if (type === 'global') {
+    deathsDescription.innerText = 'Total Deaths';
+  } else if (type === 'last-day') {
+    deathsDescription.innerText = 'Last Day';
+  } else if (type === '100k') {
+    deathsDescription.innerText = 'Per 100k people';
+  }
+  deathsControls.append(LeftArrow, deathsDescription, RightArrow);
+  deathsContainer.append(deathsControls);
+}
+
+async function moveForward() {
   const mode = deathsMode.current;
   deathsMode.current = deathsMode.next;
   deathsMode.next = deathsMode.last;
   deathsMode.last = mode;
-  document.querySelector('.deaths__subheading').remove();
-  document.getElementById('deaths-controls').remove();
   document.querySelector('.deaths__by-countries-container').remove();
-  getData(deathsMode.current.method, deathsMode.current.api);
+  document.getElementById('deaths-controls').remove();
+  await getData(deathsMode.current.method, deathsMode.current.api);
+  addControls(deathsMode.current.type);
 }
 
-function moveBack() {
+async function moveBack() {
   const mode = deathsMode.current;
   deathsMode.current = deathsMode.last;
   deathsMode.last = deathsMode.next;
   deathsMode.next = mode;
-  document.querySelector('.deaths__subheading').remove();
-  document.getElementById('deaths-controls').remove();
   document.querySelector('.deaths__by-countries-container').remove();
-  getData(deathsMode.current.method, deathsMode.current.api);
+  document.getElementById('deaths-controls').remove();
+  await getData(deathsMode.current.method, deathsMode.current.api);
+  addControls(deathsMode.current.type);
 }
 
-function sortCountries(countries, method) {
-  if (method === 'TotalDeaths') {
-    countries.sort((a, b) => (a.TotalDeaths < b.TotalDeaths ? 1 : -1));
-  } else if (method === 'NewDeaths') {
-    countries.sort((a, b) => (a.NewDeaths < b.NewDeaths ? 1 : -1));
-  }
-  return countries;
-}
-
-function appendGlobalDeaths(data) {
-  const global = data.Global;
-  const countries = data.Countries;
+function appendLastDayDeaths(countries) {
   const deathsByCountriesContainer = document.createElement('div');
   deathsByCountriesContainer.classList.add('deaths__by-countries-container');
 
-  const deathsSubheading = document.createElement('h3');
-  deathsSubheading.classList.add('deaths__subheading');
-  deathsSubheading.textContent = global.TotalDeaths;
-
-  const deathsControls = document.createElement('div');
-  deathsControls.classList.add('graph-controls');
-  deathsControls.id = 'deaths-controls';
-
-  const RightArrow = document.createElement('button');
-  RightArrow.classList.add('graph-arrow--right');
-  RightArrow.addEventListener('click', moveForward);
-
-  const LeftArrow = document.createElement('button');
-  LeftArrow.classList.add('graph-arrow--left');
-  LeftArrow.addEventListener('click', moveBack);
-
-  const deathsDescription = document.createElement('p');
-  deathsDescription.classList.add('graph--description');
-  deathsDescription.innerText = 'Total Deaths';
-  sortCountries(countries, 'TotalDeaths');
   for (let i = 0; i < countries.length; i += 1) {
     const countryContainer = document.createElement('div');
     countryContainer.classList.add('deaths__country-container');
 
     const deathsByCountries = document.createElement('h4');
     deathsByCountries.classList.add('deaths__count-by-countries');
-    deathsByCountries.textContent = countries[i].TotalDeaths;
+    deathsByCountries.textContent = countries[i].todayDeaths;
 
     const descriptorOfNumber = document.createElement('span');
     descriptorOfNumber.classList.add('deaths__number-description');
@@ -85,66 +83,48 @@ function appendGlobalDeaths(data) {
 
     const countryName = document.createElement('h4');
     countryName.classList.add('deaths__country-name');
-    countryName.textContent = countries[i].Country;
-
-    deathsByCountries.appendChild(descriptorOfNumber);
-    countryContainer.append(deathsByCountries, countryName);
-    deathsByCountriesContainer.append(countryContainer);
-  }
-  deathsControls.append(LeftArrow, deathsDescription, RightArrow);
-  deathsContainer.append(deathsSubheading, deathsByCountriesContainer, deathsControls);
-}
-
-function appendLastDayDeaths(data) {
-  const global = data.Global;
-  const countries = data.Countries;
-  const deathsByCountriesContainer = document.createElement('div');
-  deathsByCountriesContainer.classList.add('deaths__by-countries-container');
-
-  const deathsSubheading = document.createElement('h3');
-  deathsSubheading.classList.add('deaths__subheading');
-  deathsSubheading.textContent = global.NewDeaths;
-
-  const deathsControls = document.createElement('div');
-  deathsControls.classList.add('graph-controls');
-  deathsControls.id = 'deaths-controls';
-
-  const RightArrow = document.createElement('button');
-  RightArrow.classList.add('graph-arrow--right');
-  RightArrow.addEventListener('click', moveForward);
-
-  const LeftArrow = document.createElement('button');
-  LeftArrow.classList.add('graph-arrow--left');
-  LeftArrow.addEventListener('click', moveBack);
-
-  const deathsDescription = document.createElement('p');
-  deathsDescription.classList.add('graph--description');
-  deathsDescription.innerText = 'Last Day';
-
-  sortCountries(countries, 'NewDeaths');
-  for (let i = 0; i < countries.length; i += 1) {
-    const countryContainer = document.createElement('div');
-    countryContainer.classList.add('deaths__country-container');
-
-    const deathsByCountries = document.createElement('h4');
-    deathsByCountries.classList.add('deaths__count-by-countries');
-    deathsByCountries.textContent = countries[i].NewDeaths;
-
-    const descriptorOfNumber = document.createElement('span');
-    descriptorOfNumber.classList.add('deaths__number-description');
-    descriptorOfNumber.textContent = '  deaths';
-
-    const countryName = document.createElement('h4');
-    countryName.classList.add('deaths__country-name');
-    countryName.textContent = countries[i].Country;
+    countryName.textContent = countries[i].country;
 
     deathsByCountries.appendChild(descriptorOfNumber);
     countryContainer.append(deathsByCountries, countryName);
     deathsByCountriesContainer.append(countryContainer);
   }
   /* document.querySelector('.lds--global-cases').remove(); */
-  deathsControls.append(LeftArrow, deathsDescription, RightArrow);
-  deathsContainer.append(deathsSubheading, deathsByCountriesContainer, deathsControls);
+  deathsContainer.append(deathsByCountriesContainer);
+}
+
+function appendGlobalDeaths(global) {
+  const deathsSubheading = document.createElement('h3');
+  deathsSubheading.classList.add('deaths__subheading');
+  deathsSubheading.textContent = global.deaths;
+
+  deathsContainer.appendChild(deathsSubheading);
+}
+
+function appendDeathsByCountries(countries) {
+  const deathsByCountriesContainer = document.createElement('div');
+  deathsByCountriesContainer.classList.add('deaths__by-countries-container');
+  for (let i = 0; i < countries.length; i += 1) {
+    const countryContainer = document.createElement('div');
+    countryContainer.classList.add('deaths__country-container');
+
+    const deathsByCountries = document.createElement('h4');
+    deathsByCountries.classList.add('deaths__count-by-countries');
+    deathsByCountries.textContent = countries[i].deaths;
+
+    const descriptorOfNumber = document.createElement('span');
+    descriptorOfNumber.classList.add('deaths__number-description');
+    descriptorOfNumber.textContent = '  deaths';
+
+    const countryName = document.createElement('h4');
+    countryName.classList.add('deaths__country-name');
+    countryName.textContent = countries[i].country;
+
+    deathsByCountries.appendChild(descriptorOfNumber);
+    countryContainer.append(deathsByCountries, countryName);
+    deathsByCountriesContainer.append(countryContainer);
+  }
+  deathsContainer.appendChild(deathsByCountriesContainer);
 }
 
 function appendDeathsPerHundredThousandPeople(data) {
@@ -160,30 +140,6 @@ function appendDeathsPerHundredThousandPeople(data) {
   const deathsByCountriesContainer = document.createElement('div');
   deathsByCountriesContainer.classList.add('deaths__by-countries-container');
 
-  const deathsSubheading = document.createElement('h3');
-  deathsSubheading.classList.add('deaths__subheading');
-
-  fetch('https://disease.sh/v3/covid-19/all', requestOption)
-    .then((response) => response.json())
-    .then((json) => {
-      document.querySelector('.deaths__subheading').textContent = (json.deaths / (json.population / 100000)).toFixed(2);
-    });
-
-  const deathsControls = document.createElement('div');
-  deathsControls.classList.add('graph-controls');
-  deathsControls.id = 'deaths-controls';
-
-  const RightArrow = document.createElement('button');
-  RightArrow.classList.add('graph-arrow--right');
-  RightArrow.addEventListener('click', moveForward);
-
-  const LeftArrow = document.createElement('button');
-  LeftArrow.classList.add('graph-arrow--left');
-  LeftArrow.addEventListener('click', moveBack);
-
-  const deathsDescription = document.createElement('p');
-  deathsDescription.classList.add('graph--description');
-  deathsDescription.innerText = 'Per 100k People';
   for (let i = 0; i < customizedData.length; i += 1) {
     const countryContainer = document.createElement('div');
     countryContainer.classList.add('deaths__country-container');
@@ -204,14 +160,13 @@ function appendDeathsPerHundredThousandPeople(data) {
     countryContainer.append(deathsByCountries, countryName);
     deathsByCountriesContainer.append(countryContainer);
   }
-  deathsControls.append(LeftArrow, deathsDescription, RightArrow);
-  deathsContainer.append(deathsSubheading, deathsByCountriesContainer, deathsControls);
+  deathsContainer.append(deathsByCountriesContainer);
 }
 
-function getData(func, api) {
-  fetch(api, requestOption)
-    .then((response) => response.json())
-    .then((json) => func(json));
+async function init() {
+  await getData(appendGlobalDeaths, 'https://disease.sh/v3/covid-19/all');
+  await getData(appendDeathsByCountries, 'https://disease.sh/v3/covid-19/countries?sort=deaths');
+  addControls('global');
 }
 
-getData(appendGlobalDeaths, 'https://api.covid19api.com/summary');
+init();
