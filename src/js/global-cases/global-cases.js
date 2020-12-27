@@ -13,11 +13,11 @@ function appendGCasesInfo(info) {
   GlobalCasesWrapper.appendChild(GlobalCasesAmount);
 }
 
-fetch('https://api.covid19api.com/summary', requestOptions)
+fetch('https://disease.sh/v3/covid-19/all', requestOptions)
   .then((response) => response.text())
   .then((response) => JSON.parse(response))
   .then((result) => {
-    appendGCasesInfo(result.Global.TotalConfirmed);
+    appendGCasesInfo(result.cases);
   })
   .catch(() => {
     appendGCasesInfo('error: 0');
