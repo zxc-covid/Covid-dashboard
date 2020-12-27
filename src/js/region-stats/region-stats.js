@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const casesWrapper = document.querySelector('.cases-wrapper');
 const regionStatsContainer = document.querySelector('.cases-by-places-wrapper');
 const requestOptions = {
@@ -50,20 +51,14 @@ function getData(api, type) {
 }
 
 function moveForward() {
-  const mode = regionsMode.current;
-  regionsMode.current = regionsMode.next;
-  regionsMode.next = regionsMode.last;
-  regionsMode.last = mode;
+  [regionsMode.next, regionsMode.current, regionsMode.last] = [regionsMode.last, regionsMode.next, regionsMode.current];
   document.getElementById('cases-by-places').remove();
   document.getElementById('regions-description').textContent = `Total ${regionsMode.current.type[0].toUpperCase() + regionsMode.current.type.slice(1)}`;
   getData(regionsMode.current.api, regionsMode.current.type);
 }
 
 function moveBack() {
-  const mode = regionsMode.current;
-  regionsMode.current = regionsMode.last;
-  regionsMode.last = regionsMode.next;
-  regionsMode.next = mode;
+  [regionsMode.last, regionsMode.current, regionsMode.next] = [regionsMode.next, regionsMode.last, regionsMode.current];
   document.getElementById('cases-by-places').remove();
   document.getElementById('regions-description').textContent = `Total ${regionsMode.current.type[0].toUpperCase() + regionsMode.current.type.slice(1)}`;
   getData(regionsMode.current.api, regionsMode.current.type);
