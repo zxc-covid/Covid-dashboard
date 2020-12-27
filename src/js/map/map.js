@@ -32,6 +32,7 @@ function addControls() {
 
   const mapDescription = document.createElement('p');
   mapDescription.classList.add('graph--description');
+  mapDescription.id = 'map-description';
   mapDescription.innerText = 'Total Cases';
 
   mapControls.append(LeftArrow, mapDescription, RightArrow);
@@ -81,7 +82,7 @@ function moveForward() {
   mapMode.current = mapMode.next;
   mapMode.next = mapMode.last;
   mapMode.last = mode;
-  document.querySelector('.graph--description').textContent = `Total ${mapMode.current.charAt(0).toUpperCase() + mapMode.current.slice(1)}`;
+  document.getElementById('map-description').textContent = `Total ${mapMode.current.charAt(0).toUpperCase() + mapMode.current.slice(1)}`;
   map.remove();
   appendMap();
   getData(mapMode.current);
@@ -92,7 +93,7 @@ function moveBack() {
   mapMode.current = mapMode.last;
   mapMode.last = mapMode.next;
   mapMode.next = mode;
-  document.querySelector('.graph--description').textContent = `Total ${mapMode.current.charAt(0).toUpperCase() + mapMode.current.slice(1)}`;
+  document.getElementById('map-description').textContent = `Total ${mapMode.current.charAt(0).toUpperCase() + mapMode.current.slice(1)}`;
   map.remove();
   appendMap();
   getData(mapMode.current);
