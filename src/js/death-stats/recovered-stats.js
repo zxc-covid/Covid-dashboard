@@ -17,7 +17,7 @@ function moveForward() {
   recoveredMode.next = recoveredMode.last;
   recoveredMode.last = mode;
   document.querySelector('.recovered__subheading').remove();
-  document.querySelector('.recovered-controls').remove();
+  document.getElementById('recovered-controls').remove();
   document.querySelector('.recovered__by-countries-container').remove();
   getData(recoveredMode.current.method, recoveredMode.current.api);
 }
@@ -28,7 +28,7 @@ function moveBack() {
   recoveredMode.last = recoveredMode.next;
   recoveredMode.next = mode;
   document.querySelector('.recovered__subheading').remove();
-  document.querySelector('.recovered-controls').remove();
+  document.getElementById('recovered-controls').remove();
   document.querySelector('.recovered__by-countries-container').remove();
   getData(recoveredMode.current.method, recoveredMode.current.api);
 }
@@ -54,7 +54,7 @@ function appendGlobalRecovered(data) {
 
   const recoveredControls = document.createElement('div');
   recoveredControls.classList.add('graph-controls');
-  recoveredControls.classList.add('recovered-controls');
+  recoveredControls.id = 'recovered-controls';
 
   const RightArrow = document.createElement('button');
   RightArrow.classList.add('graph-arrow--right');
@@ -106,7 +106,7 @@ function appendLastDayRecovered(data) {
 
   const recoveredControls = document.createElement('div');
   recoveredControls.classList.add('graph-controls');
-  recoveredControls.classList.add('recovered-controls');
+  recoveredControls.id = 'recovered-controls';
 
   const RightArrow = document.createElement('button');
   RightArrow.classList.add('graph-arrow--right');
@@ -170,7 +170,7 @@ function appendRecoveredPerHundredThousandPeople(data) {
 
   const recoveredControls = document.createElement('div');
   recoveredControls.classList.add('graph-controls');
-  recoveredControls.classList.add('recovered-controls');
+  recoveredControls.id = 'recovered-controls';
 
   const RightArrow = document.createElement('button');
   RightArrow.classList.add('graph-arrow--right');
