@@ -1,6 +1,6 @@
-const Developers = document.querySelector('.footer');
+const Footer = document.querySelector('.footer');
 
-Developers.addEventListener('click', (e) => {
+Footer.addEventListener('click', (e) => {
   if (e.target.className === 'developer') {
     document.location.href = e.target.dataset.link;
   }
