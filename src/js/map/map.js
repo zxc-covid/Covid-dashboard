@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-console */
 /* eslint-disable no-undef */
-import leaflet, { } from 'leaflet';
+import leaflet, { circle } from 'leaflet';
 
 const mapMode = {
   last: 'recovered',
@@ -62,10 +62,7 @@ function addCircles(lat, long, type, circleColor) {
   } else {
     radius = 5000;
   }
-  const circle = L.circle(circleCenter, radius, circleOptions);
-  circle.on('click', () => {
-    console.log('asd');
-  }).addTo(map);
+  circle(circleCenter, radius, circleOptions).addTo(map);
 }
 
 function appendMarkers(countries, type) {
