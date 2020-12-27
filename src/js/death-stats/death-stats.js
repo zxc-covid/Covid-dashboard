@@ -20,7 +20,7 @@ function moveForward() {
   deathsMode.next = deathsMode.last;
   deathsMode.last = mode;
   document.querySelector('.deaths__subheading').remove();
-  document.querySelector('.graph-controls').remove();
+  document.getElementById('deaths-controls').remove();
   document.querySelector('.deaths__by-countries-container').remove();
   getData(deathsMode.current.method, deathsMode.current.api);
 }
@@ -31,7 +31,7 @@ function moveBack() {
   deathsMode.last = deathsMode.next;
   deathsMode.next = mode;
   document.querySelector('.deaths__subheading').remove();
-  document.querySelector('.graph-controls').remove();
+  document.getElementById('deaths-controls').remove();
   document.querySelector('.deaths__by-countries-container').remove();
   getData(deathsMode.current.method, deathsMode.current.api);
 }
@@ -57,6 +57,7 @@ function appendGlobalDeaths(data) {
 
   const deathsControls = document.createElement('div');
   deathsControls.classList.add('graph-controls');
+  deathsControls.id = 'deaths-controls';
 
   const RightArrow = document.createElement('button');
   RightArrow.classList.add('graph-arrow--right');
@@ -106,6 +107,7 @@ function appendLastDayDeaths(data) {
 
   const deathsControls = document.createElement('div');
   deathsControls.classList.add('graph-controls');
+  deathsControls.id = 'deaths-controls';
 
   const RightArrow = document.createElement('button');
   RightArrow.classList.add('graph-arrow--right');
@@ -169,6 +171,7 @@ function appendDeathsPerHundredThousandPeople(data) {
 
   const deathsControls = document.createElement('div');
   deathsControls.classList.add('graph-controls');
+  deathsControls.id = 'deaths-controls';
 
   const RightArrow = document.createElement('button');
   RightArrow.classList.add('graph-arrow--right');
