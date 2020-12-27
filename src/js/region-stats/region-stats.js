@@ -10,6 +10,45 @@ const regionsMode = {
   next: { api: 'https://disease.sh/v3/covid-19/countries?sort=deaths', type: 'deaths' },
 };
 
+function appendCasesByCountries(countries, type) {
+  const casesByPlaces = document.createElement('div');
+  casesByPlaces.id = 'cases-by-places';
+  for (let i = 0; i < countries.length; i += 1) {
+    const countryContainer = document.createElement('div');
+    countryContainer.classList.add('cases-container');
+
+    const confirmedCases = document.createElement('span');
+    confirmedCases.classList.add('cases-amount');
+    if (type === 'cases') {
+      confirmedCases.textContent = countries[i].cases;
+    } else if (type === 'deaths') {
+      confirmedCases.textContent = countries[i].deaths;
+    } else if (type === 'recovered') {
+      confirmedCases.textContent = countries[i].recovered;
+    }
+
+    const countryName = document.createElement('span');
+    countryName.classList.add('cases-country');
+    countryName.textContent = countries[i].country;
+
+    const flag = document.createElement('img');
+    flag.style.marginLeft = '8px';
+    flag.style.width = '20px';
+    flag.style.height = '12px';
+    flag.src = countries[i].countryInfo.flag;
+
+    countryContainer.append(confirmedCases, countryName, flag);
+    casesByPlaces.appendChild(countryContainer);
+  }
+  regionStatsContainer.appendChild(casesByPlaces);
+}
+
+function getData(api, type) {
+  fetch(api, requestOptions)
+    .then((response) => response.json())
+    .then((json) => appendCasesByCountries(json, type));
+}
+
 function moveForward() {
   const mode = regionsMode.current;
   regionsMode.current = regionsMode.next;
@@ -49,45 +88,6 @@ function addControls() {
 
   regionsControls.append(LeftArrow, regionsDescription, RightArrow);
   casesWrapper.appendChild(regionsControls);
-}
-function appendCasesByCountries(countries, type) {
-/*   sortByTotalConfirmed(countries); */
-  const casesByPlaces = document.createElement('div');
-  casesByPlaces.id = 'cases-by-places';
-  for (let i = 0; i < countries.length; i += 1) {
-    const countryContainer = document.createElement('div');
-    countryContainer.classList.add('cases-container');
-
-    const confirmedCases = document.createElement('span');
-    confirmedCases.classList.add('cases-amount');
-    if (type === 'cases') {
-      confirmedCases.textContent = countries[i].cases;
-    } else if (type === 'deaths') {
-      confirmedCases.textContent = countries[i].deaths;
-    } else if (type === 'recovered') {
-      confirmedCases.textContent = countries[i].recovered;
-    }
-
-    const countryName = document.createElement('span');
-    countryName.classList.add('cases-country');
-    countryName.textContent = countries[i].country;
-
-    const flag = document.createElement('img');
-    flag.style.marginLeft = '8px';
-    flag.style.width = '20px';
-    flag.style.height = '12px';
-    flag.src = countries[i].countryInfo.flag;
-
-    countryContainer.append(confirmedCases, countryName, flag);
-    casesByPlaces.appendChild(countryContainer);
-  }
-  regionStatsContainer.appendChild(casesByPlaces);
-}
-
-function getData(api, type) {
-  fetch(api, requestOptions)
-    .then((response) => response.json())
-    .then((json) => appendCasesByCountries(json, type));
 }
 
 document.getElementById('search-country').oninput = function searchCountry() {
