@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
+    <title>Covid dashboard</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="heading">Covid dashboard by <span class="team-name">zxc</span></div>
+        <div class="header__filter-wrapper">
+            <select name="data" id="data-select" class="header__filter filter">
+                <option selected disabled>Choose Data</option>
+                <option value="global-cases">Global Cases</option>
+                <option value="global-deaths">Global Deaths</option>
+                <option value="global-recovered">Global Recovered</option>
+            </select>
+            <select name="methods" id="methods-select" class="header__filter filter">
+                <option selected disabled>Choose Method</option>
+                <option value="all-time">All time</option>
+                <option value="last-day">Last Day</option>
+            </select>
+        </div>
+    </header>
+    <main class="main">
+        <section class="cases-wrapper">
+            <div class="global-cases-wrapper">
+                <h1 class="global-cases--text">Global cases</h1>
+                <div class="lds lds--global-cases"></div>
+            </div>
+            <div class="cases-by-places-wrapper">
+                <div class="search-wrapper">
+                    <input id="search-country" placeholder="Search a country" class="search-country" type="text">
+                </div>
+            </div>
+        </section>
+        <section class="map-wrapper">
+            <div class="map" id="map"></div>
+        </section>
+        <section class="deaths-section">
+            <div class="deaths-recovered-wrapper">
+                <div class="deaths">
+                    <h2 class="deaths__heading">Global Deaths</h2>
+                    <div class="lds lds--global-cases"></div>
+                </div>
+                <div class="recovered">
+                    <h2 class="deaths__heading">Global Recovered</h2>
+                    <div class="lds lds--global-cases"></div>
+                </div>
+            </div>
+            <div class="graph-wrapper"></div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="developer" data-link="https://github.com/Creator674">
+            <img src="./assets/images/avatar-1.jpeg" alt="avatar" class="developer--avatar">
+            <p class="developer--name">Ryzhkov Yaroslav</p>
+        </div>
+        <div class="developer" data-link="https://github.com/ShaxxKh">
+            <img src="./assets/images/avatar-2.png" alt="avatar" class="developer--avatar">
+            <p class="developer--name">Khodjaev Shakhzod</p>
+        </div>
+        <div class="developer" data-link="https://github.com/Munishkin">
+            <img src="./assets/images/avatar-3.png" alt="avatar" class="developer--avatar">
+            <p class="developer--name">Begmuratova Munira</p>
+        </div>
+        <div class="developer" data-link="https://github.com/nightfury90">
+            <img src="./assets/images/avatar-4.jpeg" alt="avatar" class="developer--avatar">
+            <p class="developer--name">Dmitriy</p>
+        </div>
+        <div class="developer" data-link="https://github.com/DmitriyDS91">
+            <img src="./assets/images/avatar-5.jpeg" alt="avatar" class="developer--avatar">
+            <p class="developer--name">Dudakov Dmitriy</p>
+        </div>
+        <div class="footer-logo">
+            <a href="https://rs.school/js/" class="footer-link">
+                <img src="./assets/images/rs-school-js-logo.svg" alt="rs-school" class="footer-logo--img">
+            </a>
+        </div>
+    </footer>
+</body>
+
+</html>
